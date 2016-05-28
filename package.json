@@ -1,0 +1,16 @@
+{
+  "name": "dream-remote",
+  "version": "1.0.0",
+  "description": "A clone of the Google Daydream VR Remote in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Daydream",
+    "VR",
+    "Controller"
+  ],
+  "author": "Edwin Webb",
+  "license": "ISC"
+}
