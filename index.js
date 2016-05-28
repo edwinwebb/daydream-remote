@@ -2,66 +2,64 @@
  * Dream Remote
  */
 
-const DefaultOptions = {
-  url : 'ws://html5rocks.websocket.org/echo'
-};
+const DefaultURL = `'ws://${window.location.host}/dreamremote`;
+//const DefaultURL = 'ws://html5rocks.websocket.org/echo';
 
-export default class DreamRemote {
-  constructor(options = DefaultOptions) {
-    this.options = options;
+class DreamRemote {
+
+  constructor() {
     this.connected = false;
+
     this.emit = this.emit.bind(this);
     this.emitClick = this.emitClick.bind(this);
-    this.socket = new Websocket(options.url);
-    this.socket.addEventLister('open',(e)=>{this.connected = true});
-    this.socket.addEventLister('close',(e)=>{this.connected = false});
-    this.socket.addEventLister('error', (e)=>{throw new Error('DreamRemote Socket Error', e)}
+    this.emitTouch = this.emitTouch.bind(this);
+
+    this.socket = new WebSocket(DefaultURL);
+    this.socket.addEventListener('open',(e)=>{this.connected = true});
+    this.socket.addEventListener('close',(e)=>{this.connected = false});
+    this.socket.addEventListener('error', (e)=>{throw new Error('DreamRemote Socket Error', e)});
+
+    this.socket.addEventListener('message', (e) => {console.log(e)})
+    this.bindEvents();
   }
 
-  get state() {
-    return this.socket.readyState;
-  }
+  bindEvents() {
+    const wheel = document.querySelector('#wheel');
+    const click = document.querySelector('#click');
 
-  inject(element) {
-    element.addEventLister('click', this.emitClick.bind(this));
-    this.element = element;
-  }
+    click.addEventListener('click', this.emitClick);
+    wheel.addEventListener('mousemove', this.emitTouch);
 
-  reconnect() {
-    this.socket = new Websocket(this.options.url);
-  }
-
-  disconnect() {
-    this.socket.close();
-  }
-
-  startEmit() {
-    this.emitEvents = true;
   }
 
   emitTouch(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
     const newEvent = {
       'type' : 'touch',
-      //'touches' : e.touches,
-      'x' : Touch.clientX,
-      'y' : Touch.clientY
-    }
+      x,
+      y
+    };
+
+    this.emit(newEvent);
   }
 
   emitClick(e) {
     const newEvent = {
-      'type': 'click',
-      'name': e.currentTarget.getAttribute('data-name') || 'unkown'
+      'type': 'click'
     }
 
     this.emit(newEvent);
   }
 
   emit(object) {
-    const jsonStr = JSON.Stringify(object);
+    const jsonStr = JSON.stringify(object);
 
-    if(this.emitEvents === true) {
+    if(this.connected === true) {
       this.socket.send(jsonStr);
     }
   }
 }
+
+var dm = new DreamRemote();
