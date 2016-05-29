@@ -44,7 +44,6 @@ socket.on('request', function(request) {
   });
 
   connection.on('close', function(connection) {
-    console.log(clients)
     clients.delete(connection);
   });
 });
