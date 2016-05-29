@@ -6,18 +6,18 @@ Best used with a cutout cardboard overlay. There's an A4 PDF in the ./assets fol
 
 To size the graphic to your overlay use the input in the top left corner. Set it to 1, measure the width of the graphic in cm, then divide 4.6 by your measurement. Put this figure into the input.
 
-Note : Development only. Contributions welcome.
+Notes : ES6. Development only. Contributions welcome.
 
 ## Install and Use
 Install
 ```
-npm install --save-dev dream-remote
+npm install --save-dev git+https://git@github.com/edwinwebb/daydream-remote
 ```
 
-Run NPM Script
+Run NPM Script and start the server
 ```
-script :{
-  "dreamremote" : "???"
+scripts :{
+  "dreamremote" : "node ./node_modules/dream-remote/index.js"
 }
 ```
 
@@ -33,7 +33,7 @@ ws://localhost:8081
 
 ### Socket Events
 
-Wheel events
+#### Wheel touch events
 ```
 const newEvent = {
   'type' : 'touch',
@@ -42,7 +42,7 @@ const newEvent = {
 };
 ```
 
-Gyro event
+#### Gyro event
 ```
 const newEvent = {
   'type' : 'orientation',
@@ -53,7 +53,7 @@ const newEvent = {
 };
 ```
 
-Click event
+#### Click event
 ```
 const newEvent = {
   'type': 'click'
