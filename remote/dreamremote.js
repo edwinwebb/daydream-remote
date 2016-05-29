@@ -2,8 +2,7 @@
  * Dream Remote
  */
 
-const DefaultURL = `ws://${window.location.host}/dreamremote`;
-//const DefaultURL = 'ws://html5rocks.websocket.org/echo';
+const DefaultURL = `ws://${window.location.host}/`;
 
 class DreamRemote {
 
@@ -12,6 +11,7 @@ class DreamRemote {
 
     this.emit = this.emit.bind(this);
     this.emitClick = this.emitClick.bind(this);
+    this.emitMouse = this.emitMouse.bind(this);
     this.emitTouch = this.emitTouch.bind(this);
     this.emitOrientation = this.emitOrientation.bind(this);
 
@@ -30,11 +30,11 @@ class DreamRemote {
 
     window.addEventListener('deviceorientation', this.emitOrientation);
     click.addEventListener('click', this.emitClick);
-    wheel.addEventListener('mousemove', this.emitTouch);
-
+    wheel.addEventListener('mousemove', this.emitMouse);
+    wheel.addEventListener('touchmove', this.emitTouch);
   }
 
-  emitTouch(e) {
+  emitMouse(e) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
@@ -47,10 +47,24 @@ class DreamRemote {
     this.emit(newEvent);
   }
 
+  emitTouch(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touches = e.changedTouches;
+    const x = (touches[0].clientX - rect.left) / rect.width;
+    const y = (touches[0].clientY - rect.top) / rect.height;
+    const newEvent = {
+      'type' : 'touch',
+      x,
+      y
+    };
+
+    this.emit(newEvent);
+  }
+
   emitClick(e) {
     const newEvent = {
       'type': 'click'
-    }
+    };
 
     this.emit(newEvent);
   }
@@ -63,7 +77,7 @@ class DreamRemote {
       beta,
       gamma,
       absolute
-    }
+    };
 
     this.emit(newEvent);
   }

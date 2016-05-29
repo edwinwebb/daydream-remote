@@ -3,7 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const port = 8001;
+const port = 8081;
 const indexFile = path.join(process.cwd(), './remote/index.html');
 const jsFile = path.join(process.cwd(), './remote/dreamremote.js');
 const clients = new Set();
@@ -29,7 +29,7 @@ const socket = new ws({
 });
 
 server.listen(port, ()=>{
-  console.log((new Date()) + " dream remote is listening");
+  console.log(`Dream-remote is listening on port ${port}`);
 });
 
 socket.on('request', function(request) {
@@ -44,6 +44,7 @@ socket.on('request', function(request) {
   });
 
   connection.on('close', function(connection) {
-    clients.remove(connection);
+    console.log(clients)
+    clients.delete(connection);
   });
 });
