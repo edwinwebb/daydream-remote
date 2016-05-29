@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A clone of the Google Daydream VR Remote in JavaScript",
   "main": "index.js",
+  "bin": {
+    "dream-remote": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --es_staging index.js"
