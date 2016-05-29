@@ -4,13 +4,20 @@
   "description": "A clone of the Google Daydream VR Remote in JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --es_staging index.js"
   },
   "keywords": [
     "Daydream",
     "VR",
+    "gyroscope",
+    "accelerometer",
+    "touch",
     "Controller"
   ],
   "author": "Edwin Webb",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "websocket": "^1.0.23"
+  }
 }
