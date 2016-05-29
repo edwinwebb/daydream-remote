@@ -16,8 +16,8 @@ class DreamRemote {
     this.emitOrientation = this.emitOrientation.bind(this);
 
     this.socket = new WebSocket(DefaultURL);
-    this.socket.addEventListener('open',(e)=>{this.connected = true});
-    this.socket.addEventListener('close',(e)=>{this.connected = false});
+    this.socket.addEventListener('open',(e)=>{document.querySelector('.status').classList.add('connected')});
+    this.socket.addEventListener('close',(e)=>{document.querySelector('.status').classList.remove('connected')});
     this.socket.addEventListener('error', (e)=>{throw new Error('DreamRemote Socket Error', e)});
 
     this.socket.addEventListener('message', (e) => {console.log(e)});

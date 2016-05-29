@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width">
   <title>DreamRemote</title>
   <style>
     html, body, .wrap {
@@ -10,6 +10,10 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+    }
+
+    body {
+      position: relative;
     }
 
     .wrap {
@@ -20,6 +24,30 @@
 
     svg {
       width: 4.6cm;
+    }
+
+    .status {
+      position: absolute;
+      top:10px;
+      right:10px;
+      font-family: sans-serif;
+      color: lightgrey;
+    }
+
+    .status.connected {
+      color:green;
+    }
+
+    input {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    button {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
     }
   </style>
 </head>
@@ -47,9 +75,32 @@
       	c0-28.1,22.9-51,51-51c28.1,0,51,22.9,51,51C117,93.9,94.1,116.8,65.9,116.8z"/>
     </svg>
   </div>
+  <div class="status">
+    CONNECTED
+  </div>
+  <input type="number" min="1" max="5" step=".1" value="1" />
+  <button>FS</button>
   <script src="./dreamremote.js" charset="utf-8"></script>
   <script>
+    const lswidth = window.localStorage.getItem('width');
+
     new DreamRemote();
+
+    document.querySelector('input').addEventListener('change', (e) => {
+      const val = parseFloat(e.currentTarget.value);
+      const width = `${4.6*val}cm`;
+      document.querySelector('svg').style.width = width;
+      window.localStorage.setItem('width', width)
+    });
+
+    document.querySelector('button').addEventListener('click', (e) => {
+      document.body.webkitRequestFullscreen();
+    });
+
+    if(lswidth) {
+      document.querySelector('svg').style.width = lswidth;
+    }
+
   </script>
 </body>
 </html>
