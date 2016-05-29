@@ -85,8 +85,6 @@ class DreamRemote {
   emit(object) {
     const jsonStr = JSON.stringify(object);
 
-    if(this.connected === true) {
-      this.socket.send(jsonStr);
-    }
+    this.socket.send(jsonStr);
   }
 }
