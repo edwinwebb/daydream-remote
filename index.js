@@ -2,7 +2,7 @@
  * Dream Remote
  */
 
-const DefaultURL = `'ws://${window.location.host}/dreamremote`;
+const DefaultURL = `ws://${window.location.host}/dreamremote`;
 //const DefaultURL = 'ws://html5rocks.websocket.org/echo';
 
 class DreamRemote {
@@ -13,13 +13,14 @@ class DreamRemote {
     this.emit = this.emit.bind(this);
     this.emitClick = this.emitClick.bind(this);
     this.emitTouch = this.emitTouch.bind(this);
+    this.emitOrientation = this.emitOrientation.bind(this);
 
     this.socket = new WebSocket(DefaultURL);
     this.socket.addEventListener('open',(e)=>{this.connected = true});
     this.socket.addEventListener('close',(e)=>{this.connected = false});
     this.socket.addEventListener('error', (e)=>{throw new Error('DreamRemote Socket Error', e)});
 
-    this.socket.addEventListener('message', (e) => {console.log(e)})
+    this.socket.addEventListener('message', (e) => {console.log(e)});
     this.bindEvents();
   }
 
@@ -27,6 +28,7 @@ class DreamRemote {
     const wheel = document.querySelector('#wheel');
     const click = document.querySelector('#click');
 
+    window.addEventListener('deviceorientation', this.emitOrientation);
     click.addEventListener('click', this.emitClick);
     wheel.addEventListener('mousemove', this.emitTouch);
 
@@ -53,6 +55,19 @@ class DreamRemote {
     this.emit(newEvent);
   }
 
+  emitOrientation(e) {
+    const {alpha, beta, gamma, absolute} = e;
+    const newEvent = {
+      'type' : 'orientation',
+      alpha,
+      beta,
+      gamma,
+      absolute
+    }
+
+    this.emit(newEvent);
+  }
+
   emit(object) {
     const jsonStr = JSON.stringify(object);
 
@@ -61,5 +76,3 @@ class DreamRemote {
     }
   }
 }
-
-var dm = new DreamRemote();
