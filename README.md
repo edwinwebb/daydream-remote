@@ -28,7 +28,7 @@ http://localhost:8081
 
 Connect to in VR app
 ```
-ws://localhost:8081
+new WebSocket(`ws://${window.location.hostname}:8081/`)
 ```
 
 ### Socket Events

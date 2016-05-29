@@ -7,8 +7,7 @@ const DefaultURL = `ws://${window.location.host}/`;
 class DreamRemote {
 
   constructor() {
-    this.connected = false;
-
+    
     this.emit = this.emit.bind(this);
     this.emitClick = this.emitClick.bind(this);
     this.emitMouse = this.emitMouse.bind(this);
