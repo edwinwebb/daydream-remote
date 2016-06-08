@@ -7,12 +7,13 @@ const DefaultURL = `ws://${window.location.host}/`;
 class DreamRemote {
 
   constructor() {
-    
+
     this.emit = this.emit.bind(this);
     this.emitClick = this.emitClick.bind(this);
     this.emitMouse = this.emitMouse.bind(this);
     this.emitTouch = this.emitTouch.bind(this);
     this.emitOrientation = this.emitOrientation.bind(this);
+    this.emitMotion = this.emitMotion.bind(this);
 
     this.socket = new WebSocket(DefaultURL);
     this.socket.addEventListener('open',(e)=>{document.querySelector('.status').classList.add('connected')});
@@ -28,9 +29,12 @@ class DreamRemote {
     const click = document.querySelector('#click');
 
     window.addEventListener('deviceorientation', this.emitOrientation);
+    window.addEventListener('devicemotion', this.emitMotion);
     click.addEventListener('click', this.emitClick);
     wheel.addEventListener('mousemove', this.emitMouse);
     wheel.addEventListener('touchmove', this.emitTouch);
+    wheel.addEventListener('touchstart', this.emitTouch);
+    wheel.addEventListener('touchend', this.emitTouch);
   }
 
   emitMouse(e) {
@@ -48,11 +52,11 @@ class DreamRemote {
 
   emitTouch(e) {
     const rect = e.currentTarget.getBoundingClientRect();
-    const touches = e.changedTouches;
+    const touches = e.changedTouches || e.touches;
     const x = (touches[0].clientX - rect.left) / rect.width;
     const y = (touches[0].clientY - rect.top) / rect.height;
     const newEvent = {
-      'type' : 'touch',
+      'type' : e.type,
       x,
       y
     };
@@ -76,6 +80,22 @@ class DreamRemote {
       beta,
       gamma,
       absolute
+    };
+
+    this.emit(newEvent);
+  }
+
+  emitMotion() {
+    const {x,y,z} = e.acceleration;
+    const {alpha, beta, gamma} = e.rotationRate ;
+    const newEvent = {
+      'type' : 'motion',
+      x,
+      y,
+      z,
+      alpha,
+      beta,
+      gamma
     };
 
     this.emit(newEvent);
