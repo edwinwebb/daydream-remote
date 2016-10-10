@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const port = 8081;
-const indexFile = path.resolve(process.cwd(), './remote/index.html');
-const jsFile = path.resolve(process.cwd(), './remote/dreamremote.js');
+const indexFile = path.resolve(__dirname, './remote/index.html');
+const jsFile = path.resolve(__dirname, './remote/dreamremote.js');
 const clients = new Set();
 
 const server = http.createServer((request, response)=>{

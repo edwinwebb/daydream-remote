@@ -28,7 +28,10 @@ http://localhost:8081
 
 Connect to in VR app
 ```
-new WebSocket(`ws://${window.location.hostname}:8081/`)
+const remote  = new WebSocket(`ws://${window.location.hostname}:8081/`)
+remote.addEventListener('message', (e) => {
+  const data = JSON.parse(e.data);
+});
 ```
 
 ### Socket Events
